@@ -116,10 +116,11 @@ function evolution(){
 }
 
 setup();
+let evolution_interval;
 start_btn.onclick = () => {
-    setInterval(evolution,1);
+   evolution_interval = setInterval(evolution,1);
 }
 stop_btn.onclick = () => {
-    clearInterval(evolution);
+    clearInterval(evolution_interval);
 }
 //console.table(grid);
