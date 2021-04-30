@@ -1,120 +1,86 @@
-let cols,rows,grid;
-const res          = 5;
-const canvas       = document.getElementById('canvas');
-const ctx          = canvas.getContext('2d');
-const start_btn    = document.querySelector('.start');
-const stop_btn     = document.querySelector('.stop');
-function create2Darray(c,r){
-    let arr = new Array(c);
-    for(let i = 0; i < arr.length; i++){
-        arr[i] = new Array(r);
+let width,height,grid,mirror;
+width  = 1000;
+height = 800;
+
+grid = mirror = create_arr(width);
+const canvas  = document.getElementById('canvas');
+const ctx     = canvas.getContext('2d');
+ctx.fillStyle = "green";
+fill_random();
+draw_grid();
+setInterval(()=>{
+  draw_grid();
+  update_grid();
+},10);
+//loop();
+function create_arr(rows){
+    let arr = [];
+    for(let i = 0; i < rows; i++){
+        arr[i] = [];
     }
-    return arr
+    return arr;
 }
 
-function setup(){   
-    cols = canvas.width  / res;
-    rows = canvas.height / res;
-    grid = create2Darray(cols,rows);
-    for(let i = 0; i < grid.length; i++){
-        for(let j = 0; j < grid.length; j++){
-            //let number = Math.round(Math.random() * 100)+1 ;
-            //grid[i][j] = number >= 90 ? 1 : 0;
-            grid[i][j] = 0;
-            grid[15][15] = 1;
-            grid[15][16] = 1;
-            grid[14][15] = 1;
-            grid[14][16] = 1;
-            grid[24][15] = 1;
-            grid[24][16] = 1;
-            grid[24][17] = 1;
-            grid[25][14] = 1;
-            grid[25][18] = 1;
-            grid[26][13] = 1;
-            grid[27][13] = 1;
-            grid[26][19] = 1;
-            grid[27][19] = 1;
-            grid[28][16] = 1;
-            grid[29][18] = 1;
-            grid[29][14] = 1;
-            grid[30][17] = 1;
-            grid[30][16] = 1;
-            grid[30][15] = 1;
-            grid[31][16] = 1;
-            grid[34][15] = 1;
-            grid[34][14] = 1;
-            grid[34][13] = 1;
-            grid[35][15] = 1;
-            grid[35][14] = 1;
-            grid[35][13] = 1;
-            grid[36][12] = 1;
-            grid[36][16] = 1;
-            grid[38][12] = 1;
-            grid[38][11] = 1;
-            grid[38][16] = 1;
-            grid[38][17] = 1;
-            grid[48][14] = 1;
-            grid[48][13] = 1;
-            grid[49][13] = 1;
-            grid[49][14] = 1;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        }
-    }
-    draw();
-}
-
-function draw(){
-    for(let i = 0; i < grid.length; i++){
-        for(let j = 0; j < grid.length; j++){
-            ctx.fillRect(i * res,j * res,res-2,res-2);
-            ctx.fillStyle = grid[i][j] == 1 ? 'green' : '#e6e6e6';
+function fill_random(){
+    for(let i = 0; i < width; i++){
+        for(let j = 0; j < height; j++){
+            grid[i][j] = Math.round(Math.random() * 100) + 1 < 85 ? 0 : 1;
         }
     }
 }
-function countNeighbors(grid,x,y){
-    let sum = 0;
-    for(let i = -1; i < 2; i++){
-        for(let j = -1; j < 2; j++){
-            sum += grid[(x+i+cols)%cols][(y+j+rows)%rows];
-        }
-    }
-    sum -= grid[x][y];
-    return sum;
-}
-
-function evolution(){
-    let next = create2Darray(cols,rows);
-    for(let i =0 ; i < cols; i++){
-        for(let j = 0; j < rows;j++){
-            let state = grid[i][j];
-            let neighbors = countNeighbors(grid,i,j);
-            if(state == 0 && neighbors == 3){
-                next[i][j] = 1;
-            } else if(state == 1 && (neighbors < 2 && neighbors > 3)){
-                next[i][j] = 0;
-            }
-            else{
-                next[i][j] = state;
+function draw_grid(){
+    console.log('draw');
+    ctx.clearRect(0,0,height,width);
+    for(let i = 1; i < width; i++){
+        for(let j = 1; j < height; j++){
+            if(grid[i][j] === 1){
+                ctx.fillRect(i*5,j*5,4,4);
             }
         }
     }
-    grid = next;
-    draw();
 }
 
+function update_grid(){
+    for(let i = 1; i < width - 1; i++){
+        for(let j = 1; j < height - 1; j++){
+            let total = 0;
+            total    += grid[i-1][j-1];
+            total    += grid[i][j-1];
+            total    += grid[j-1][i];
+            total    += grid[i-1][j+1];
+            total    += grid[i][j+1];
+            total    += grid[i+1][j];
+            total    += grid[i+1][j+1];
+            total    += grid[i+1][j-1];
+
+            switch(total){
+                case 2:
+                    mirror[i][j] = grid[i][j]
+                    break;
+                case 3:
+                    mirror[i][j] = 1;
+                    break;
+                default:
+                    mirror[i][j] = 0;
+            }
+        }
+    }
+
+<<<<<<< HEAD
+    for (var l = 1; l < height - 1; l++) {
+	    //top and bottom
+	    mirror[l][0] = mirror[l][height - 3];
+	    mirror[l][height - 2] = mirror[l][1];
+	    //left and right
+	    mirror[0][l] = mirror[height - 3][l];
+	    mirror[height - 2][l] = mirror[1][l];
+	  }
+
+    let copy = grid;
+    grid     = mirror;
+    mirror   = copy;
+}
+=======
 setup();
 let evolution_interval;
 start_btn.onclick = () => {
@@ -124,3 +90,4 @@ stop_btn.onclick = () => {
     clearInterval(evolution_interval);
 }
 //console.table(grid);
+>>>>>>> 8b31c71e2cf7a0a0f80990e676f46dfa6787c931
