@@ -9,3 +9,8 @@ const CANVAS_HEIGHT = 900;
 const GRID_WIDTH  = CANVAS_WIDTH  / CELL_SIZE;
 const GRID_HEIGHT = CANVAS_HEIGHT / CELL_SIZE;
 
+
+
+(function main() {
+
+})();
