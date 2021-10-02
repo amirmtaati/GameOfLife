@@ -17,11 +17,14 @@ export default class Grid {
         }
     }
 
+    drawCell(context , x , y) {
+        context.fillRect(this.cellSize * x , this.cellSize * y , this.cellSize - 1 , this.cellSize - 1);
+    }
 
     draw() {
         for (let x = 0 ; x < this.width ; x++) {
             for (let y = 0 ; y < this.height ; y++) {
-                this.context.fillRect(this.cellSize * x , this.cellSize * y , this.cellSize - 1 , this.cellSize - 1);
+                this.drawCell(this.context , x , y);
             }
         }
     }
