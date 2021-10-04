@@ -24,11 +24,15 @@ export default class Grid {
   fillGrid() {
     for (let x = 0; x < this.width; x++) {
       for (let y = 0; y < this.height; y++) {
-        const cell = new Cell(x, y, this.cellSize, this.context);
+        const cell = new Cell(x , y , this.randomNum() , this.cellSize , this.context);
         this.grid[x][y] = cell;
       }
     }
     console.log(this.grid);
+  }
+
+  randomNum() {
+      return (Math.ceil(Math.random() * 100) + 1) > 35 ? 1 : 0;
   }
 
   draw() {
