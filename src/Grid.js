@@ -24,11 +24,10 @@ export default class Grid {
   fillGrid() {
     for (let x = 0; x < this.width; x++) {
       for (let y = 0; y < this.height; y++) {
-        const cell = new Cell(x , y , this.randomNum() , this.cellSize , this.context);
+        const cell = new Cell(x , y , this.randomNum() , this.cellSize , this.grid , this.context);
         this.grid[x][y] = cell;
       }
     }
-    console.log(this.grid);
   }
 
   randomNum() {
